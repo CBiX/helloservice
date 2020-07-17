@@ -1,0 +1,9 @@
+[Socket]
+ListenStream = /var/run/helloservice.sock
+SocketMode = 0660
+SocketUser = helloservice
+# if accessed by a reverse proxy, it has to be in this group
+SocketGroup = www-data
+
+[Install]
+WantedBy = sockets.target

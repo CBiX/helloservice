@@ -1,0 +1,12 @@
+[Unit]
+Description = Example of a systemd socket-activated HTTP server written in go
+After = network.target
+
+[Service]
+Type = simple
+User = helloservice
+ExecStart = /usr/local/bin/helloservice
+Restart = on-failure
+
+[Install]
+WantedBy = multi-user.target

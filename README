@@ -1,0 +1,23 @@
+Simple example of a systemd-socket activated HTTP server with an nginx reverse-proxy configuration.
+
+I find systemd quite useful for quick but reliable service deployments and this is sort of a template for new services.
+
+Please read the sysusers.d(5) and systemd.socket(5) man pages.
+
+Building:
+go build # needs golang >= 1.14
+
+Installation paths:
+/usr/local/bin/helloservice
+/usr/local/lib/systemd/system/helloservice.service
+/usr/local/lib/systemd/system/helloservice.socket
+/usr/lib/sysusers.d/helloservice.conf
+/etc/nginx/sites-available/helloservice.nginx.conf
+
+Deploy:
+systemd-sysusers
+systemctl daemon-reload
+systemctl enable helloservice.socket
+
+Run:
+systemctl start helloservice.socket
