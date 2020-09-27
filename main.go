@@ -3,7 +3,9 @@ package main
 import (
 	"io"
 	"log"
+	"net"
 	"net/http"
+	"sync"
 
 	"github.com/coreos/go-systemd/v22/activation"
 )
@@ -21,8 +23,16 @@ func main() {
 	listeners, err := activation.Listeners()
 
 	if err == nil && len(listeners) >= 1 {
-		// only supports one listener for now, for multiple listeners try Accept=true in the .service
-		log.Fatal(http.Serve(listeners[0], nil))
+		wg := new(sync.WaitGroup)
+		wg.Add(len(listeners))
+		for _, l := range listeners {
+			go func(listener net.Listener) {
+				log.Println("listening in goroutine")
+				log.Fatal(http.Serve(listener, nil))
+				wg.Done()
+			}(l)
+		}
+		wg.Wait()
 	} else {
 		log.Fatal(http.ListenAndServe(":8083", nil))
 	}
